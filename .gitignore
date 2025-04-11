@@ -1,0 +1,8 @@
+# build dirs
+build/
+
+# executables
+*.out
+
+# vscode
+.vscode
