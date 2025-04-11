@@ -12,7 +12,11 @@ public:
     ~MainWindow();
 
 private:
-    void setupUi(); // Function to set up UI components
+    void setupUi();
 
-    QPushButton *button; // Example button
+    QPushButton *button;
+
+private slots:
+    void handleLedButton();
+
 };
