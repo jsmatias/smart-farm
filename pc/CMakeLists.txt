@@ -12,6 +12,7 @@ set(CMAKE_AUTOMOC ON)
 set(SOURCES
     src/main.cpp
     src/gui/MainWindow.cpp
+    src/network/TcpClient.cpp
 )
 # Add executable
 add_executable(Dragonfly ${SOURCES})
@@ -28,4 +29,5 @@ target_include_directories(Dragonfly PRIVATE
     ${Qt6Widgets_INCLUDE_DIRS}
     ${Qt6Network_INCLUDE_DIRS}
     src/gui
+    src/network
 )

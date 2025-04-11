@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include "../network/TcpClient.h"
 
 class MainWindow : public QMainWindow
 {
@@ -13,10 +14,12 @@ public:
 
 private:
     void setupUi();
+    bool setupNetwork();
 
-    QPushButton *button;
+    bool ledOn;
+    QPushButton* button;
+    TcpClient* client;
 
 private slots:
     void handleLedButton();
-
 };
