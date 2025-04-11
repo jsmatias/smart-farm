@@ -31,8 +31,8 @@
 
 #include <WiFiS3.h>
 
-char ssid[] = "vrouwenregt13a";
-char pass[] = "REMOVED";
+char ssid[] = "ssid";
+char pass[] = "pass";
 
 WiFiServer server(80);
 
@@ -64,6 +64,6 @@ void loop() {
     }
 
     client.println("ACK");
-    client.stop();
+    // client.stop();
   }
 }
