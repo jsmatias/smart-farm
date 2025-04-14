@@ -6,3 +6,7 @@ build/
 
 # vscode
 .vscode
+
+# Secrets
+secrets.h
+.env
