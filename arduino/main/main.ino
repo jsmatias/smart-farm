@@ -2,6 +2,8 @@
 #include "Arduino_LED_Matrix.h"
 #include "wifi_helper.h"
 #include "secrets.h"
+#include "wifi_client.h"
+#include "command.h"
 
 ArduinoLEDMatrix matrix;
 
@@ -14,8 +16,13 @@ void setup() {
   connectToWifi(ssid, pass);
 
   // 3. Update LED matrix
+  const uint32_t happy[] = {
+    0x19819,
+    0x80000001,
+    0x81f8000
+  };
   matrix.begin();
-  // matrix.loadFrame();
+  matrix.loadFrame(happy);
 }
 
 void loop() {
@@ -23,21 +30,14 @@ void loop() {
   // 1. Cconnect to client 
   WiFiClient client = server.available();
   if (client) 
-  {
-    // 2. Parse client command
-    Serial.println("Client connected");
-    String command = client.readStringUntil('\n');
-    command.trim();
+    {
+      Serial.println("Client connected");
+      // 2. Parse client command
+      Command command = parseCommand(client);
+      processCommand(command, nullptr);
 
-    // 3. process client command
-    if (command == "LED_ON") {
-      digitalWrite(13, HIGH);
-    } else if (command == "LED_OFF") {
-      digitalWrite(13, LOW);
+      // Acknowledge client
+      client.println("ACK");
+      client.stop();
     }
-
-    // Acknowledge client
-    client.println("ACK");
-    // client.stop();
-  }
 }
