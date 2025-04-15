@@ -3,6 +3,7 @@
 #include <string>
 #include "wifi_helper.h"
 #include "command.h"
+#include "pins.h"
 
 
 Command parseCommand(WiFiClient& client)
@@ -18,10 +19,10 @@ void processCommand(const Command& command, const arduino::String* parameters = 
     switch (command)
     {
     case Command::LED_ON:
-        digitalWrite(13, PinStatus::HIGH);
+        digitalWrite(LED_PIN, PinStatus::HIGH);
         break;
     case Command::LED_OFF:
-        digitalWrite(13, PinStatus::LOW);
+        digitalWrite(LED_PIN, PinStatus::LOW);
         break;
     default:
         break;
