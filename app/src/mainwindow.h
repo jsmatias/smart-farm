@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
+#include <QAction>
+#include <QString>
+
+#include "./network/tcp_client.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,11 +24,14 @@ public:
 
 
 private slots:
-    void onConnectPushButton();
     void showControlView();
     void showHistoryView();
+    void onConnectPushButton();
+    void onLedPushButton();
 
 private:
     Ui::MainWindow *ui;
+    TcpClient* client;
+    bool isLedOn;
 };
 #endif // MAINWINDOW_H

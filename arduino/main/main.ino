@@ -14,7 +14,6 @@ void setup() {
   Serial.begin(9600);
   
   connectToWifi(ssid, pass);
-
   // 3. Update LED matrix
   const uint32_t happy[] = {
     0x19819,
@@ -32,12 +31,20 @@ void loop() {
   if (client) 
     {
       Serial.println("Client connected");
+      Serial.print("Start: ");
+      Serial.println(millis());
       // 2. Parse client command
       Command command = parseCommand(client);
+      Serial.print("Parsed at: ");
+      Serial.println(millis());
+      
+
       processCommand(command, nullptr);
+      Serial.print("Processed at: ");
+      Serial.println(millis());
 
       // Acknowledge client
       client.println("ACK");
-      client.stop();
+      // client.stop();
     }
 }
