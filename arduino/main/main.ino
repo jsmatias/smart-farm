@@ -41,21 +41,26 @@ void loop() {
   // 1. Cconnect to client 
   WiFiClient client = server.available();
   if (client) 
+  {
+    Serial.println("Client connected");
+    Serial.print("Start: ");
+    Serial.println(millis());
+    while (client.connected())
     {
-      Serial.println("Client connected");
-      Serial.print("Start: ");
-      Serial.println(millis());
-      // 2. Parse client command
-      Command command = parseCommand(client);
-      Serial.print("Parsed at: ");
-      Serial.println(millis());
-      
-      arduino::String msg = processCommand(command, nullptr);
-      Serial.print("Processed at: ");
-      Serial.println(millis());
-
-      // Acknowledge client
-      client.println(msg);
-      // client.stop();
+      if (client.available())
+      {
+        // 2. Parse client command
+        Command command = parseCommand(client);
+        Serial.print("Parsed at: ");
+        Serial.println(millis());
+        arduino::String msg = processCommand(command, nullptr);
+        Serial.print("Processed at: ");
+        Serial.println(millis());
+        // Acknowledge client
+        client.println(msg);
+        client.stop();
+        break;
+      }
     }
+  }
 }

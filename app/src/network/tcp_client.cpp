@@ -38,21 +38,21 @@ bool TcpClient::disconnectFromHost()
     return socket->isOpen();
 }
 
-bool TcpClient::sendMessage(const QString &message)
+QString TcpClient::sendMessage(const QString &message)
 {
     if (socket->isOpen())
     {
-        socket->write(message.toUtf8());
+        QString formattedMsg = message + "\n";  
+        QByteArray msgBytes = formattedMsg.toUtf8();
+        socket->write(msgBytes);
         socket->flush();
 
         if (socket->waitForReadyRead(3000))
         {
-            QString response = QString::fromUtf8(socket->readAll());
-            qDebug() << "Received from Arduino: " << response;
-            return true;
+            return QString::fromUtf8(socket->readLine());
         }
     }
-    return false;
+    return "";
 }
 
 QString TcpClient::getIP()

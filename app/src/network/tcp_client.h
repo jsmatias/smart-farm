@@ -14,8 +14,7 @@ class TcpClient : public QObject
 
         bool connectToHost();
         bool disconnectFromHost();
-        bool sendMessage(const QString& message);
-
+        QString sendMessage(const QString& message);
         QString getIP();
         
     private:

@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QAction>
 #include <QString>
+#include <QTimer>
 
 #include "./network/tcp_client.h"
 
@@ -22,16 +23,19 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
 private slots:
+    void pollArduino();
     void showControlView();
     void showHistoryView();
     void onConnectPushButton();
     void onLedPushButton();
+    // void onFanPushButton();
 
 private:
     Ui::MainWindow *ui;
     TcpClient* client;
+    QTimer *pollTimer;
     bool isLedOn;
+    bool isFanOn;
 };
 #endif // MAINWINDOW_H

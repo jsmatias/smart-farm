@@ -6,26 +6,36 @@
 #include "pins.h"
 
 
-Command parseCommand(WiFiClient& client)
+Command parseCommand(WiFiClient& client, uint16_t timeout = 1000)
 {
-    arduino::String command = client.readStringUntil('\n');
-    command.trim();
+    arduino::String line = "";
+    unsigned long start = millis();
+    while (client.connected() && millis() - start < timeout) {
+        if (client.available()) {
+            char c = client.read();
+            if (c == '\n') break;
+            line += c;
+        }
+    }
 
-    return commandFromString(command);
+    return commandFromString(line);
 }
 
-void processCommand(const Command& command, const arduino::String* parameters = nullptr)
+arduino::String processCommand(const Command& command, const arduino::String* parameters = nullptr)
 {
     switch (command)
     {
     case Command::LED_ON:
         digitalWrite(LED_PIN, PinStatus::HIGH);
-        break;
+        return "ACK";
     case Command::LED_OFF:
         digitalWrite(LED_PIN, PinStatus::LOW);
-        break;
+        return "ACK";
+    case Command::GET_DATA:
+        return "LIGHT_INTENSITY:" + arduino::String(analogRead(PHOTO_DIODE_PIN));
+        
     default:
-        break;
+        return "UNKNOWN";
     }
 }
 
