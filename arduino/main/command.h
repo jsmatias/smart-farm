@@ -6,6 +6,7 @@ enum class Command
 {
     LED_ON,
     LED_OFF,
+    GET_DATA,
     UNKNOWN
 };
 

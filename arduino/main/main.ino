@@ -1,9 +1,13 @@
 
+#include "LiquidCrystal_I2C.h"
 #include "Arduino_LED_Matrix.h"
 #include "wifi_helper.h"
 #include "secrets.h"
 #include "wifi_client.h"
 #include "command.h"
+#include "pins.h"
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 ArduinoLEDMatrix matrix;
 
@@ -12,6 +16,8 @@ const char* pass = SECRET_PASS;
 
 void setup() {
   Serial.begin(9600);
+
+  setupPins();
   
   connectToWifi(ssid, pass);
   // 3. Update LED matrix
@@ -22,10 +28,16 @@ void setup() {
   };
   matrix.begin();
   matrix.loadFrame(happy);
+
+  lcd.init();
+  lcd.backlight();    
+  lcd.setCursor(0, 0);
+  lcd.print("Hello, from Bee!");
+  lcd.setCursor(0, 1);
+  lcd.print(WiFi.localIP());
 }
 
 void loop() {
-  // Serial.println(WiFi.localIP());
   // 1. Cconnect to client 
   WiFiClient client = server.available();
   if (client) 
@@ -38,13 +50,12 @@ void loop() {
       Serial.print("Parsed at: ");
       Serial.println(millis());
       
-
-      processCommand(command, nullptr);
+      arduino::String msg = processCommand(command, nullptr);
       Serial.print("Processed at: ");
       Serial.println(millis());
 
       // Acknowledge client
-      client.println("ACK");
+      client.println(msg);
       // client.stop();
     }
 }
