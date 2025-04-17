@@ -6,10 +6,7 @@
 #include "wifi_client.h"
 #include "command.h"
 #include "pins.h"
-
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-
-ArduinoLEDMatrix matrix;
+#include "displays.h"
 
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
@@ -18,27 +15,12 @@ void setup() {
   Serial.begin(9600);
 
   setupPins();
-  
   connectToWifi(ssid, pass);
-  // 3. Update LED matrix
-  const uint32_t happy[] = {
-    0x19819,
-    0x80000001,
-    0x81f8000
-  };
-  matrix.begin();
-  matrix.loadFrame(happy);
-
-  lcd.init();
-  lcd.backlight();    
-  lcd.setCursor(0, 0);
-  lcd.print("Hello, from Bee!");
-  lcd.setCursor(0, 1);
-  lcd.print(WiFi.localIP());
+  setUpLedMatrix();
+  setUpLcd(WiFi.localIP());
 }
 
 void loop() {
-  // 1. Cconnect to client 
   WiFiClient client = server.available();
   if (client) 
   {
@@ -49,14 +31,12 @@ void loop() {
     {
       if (client.available())
       {
-        // 2. Parse client command
         Command command = parseCommand(client);
         Serial.print("Parsed at: ");
         Serial.println(millis());
         arduino::String msg = processCommand(command, nullptr);
         Serial.print("Processed at: ");
         Serial.println(millis());
-        // Acknowledge client
         client.println(msg);
         client.stop();
         break;
