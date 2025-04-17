@@ -4,9 +4,8 @@
 #include "Arduino_LED_Matrix.h"
 
 
-inline void setUpLedMatrix()
+inline void setUpLedMatrix(ArduinoLEDMatrix& matrix)
 {
-    ArduinoLEDMatrix matrix;
     const uint32_t happy[] = {
       0x19819,
       0x80000001,

@@ -8,15 +8,19 @@
 #include "pins.h"
 #include "displays.h"
 
+ArduinoLEDMatrix matrix;
+
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
+
+long clientConnectedAt = -5000;
 
 void setup() {
   Serial.begin(9600);
 
   setupPins();
   connectToWifi(ssid, pass);
-  setUpLedMatrix();
+  setUpLedMatrix(matrix);
   setUpLcd(WiFi.localIP());
 }
 
@@ -25,6 +29,7 @@ void loop() {
   if (client) 
   {
     Serial.println("Client connected");
+    clientConnectedAt = millis();
     Serial.print("Start: ");
     Serial.println(millis());
     while (client.connected())
@@ -42,5 +47,9 @@ void loop() {
         break;
       }
     }
+  }
+  if (millis() - clientConnectedAt > 5000)
+  {
+    digitalWrite(LED_PIN, analogRead(PHOTO_DIODE_PIN) < 750 ? PinStatus::HIGH : PinStatus::LOW);
   }
 }
